@@ -206,7 +206,7 @@ Receita Inflada pelos Erros (R$ mi) = [Receita Antes da Limpeza (R$ mi)] - [Rece
 ## 4. Páginas do relatório (história para a diretoria)
 
 Em **todas as páginas**, coloque no painel de filtros (**Filtros nesta página**):
-- `dim_tempo[ano]` = 2025 nas páginas de geração (o PLD vai até 2026, mas a geração é só de 2025).
+- `dim_tempo[ano]` = 2025 nas páginas de geração, caso o PLD real de 2026 seja carregado (a geração é só de 2025).
 - `dim_usina[cod_usina]` diferente de `DESCONHECIDA` (exceto na página 7).
 
 E em todas as páginas, uma **caixa de texto no rodapé**:
