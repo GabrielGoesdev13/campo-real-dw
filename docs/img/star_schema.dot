@@ -1,0 +1,88 @@
+digraph star {
+  graph [rankdir=LR, splines=ortho, nodesep=0.35, ranksep=1.1, bgcolor="white", fontname="Helvetica", pad=0.3];
+  node  [shape=plain, fontname="Helvetica", fontsize=10];
+  edge  [color="#8a8f98", arrowhead=none, penwidth=1.2];
+
+  dim_tempo [label=<
+  <table border="0" cellborder="1" cellspacing="0" cellpadding="4" color="#2f6db5">
+    <tr><td bgcolor="#2f6db5"><font color="white"><b>dim_tempo</b></font></td></tr>
+    <tr><td align="left"><b>sk_tempo</b> (AAAAMMDDHH)</td></tr>
+    <tr><td align="left">data_hora, data, ano, mes, ano_mes</td></tr>
+    <tr><td align="left">dia_semana, hora, faixa_horaria</td></tr>
+    <tr><td align="left">flag_feriado, flag_dia_util</td></tr>
+    <tr><td align="left">estacao_ano, periodo_hidrologico</td></tr>
+    <tr><td align="left">patamar_carga, flag_horario_ponta</td></tr>
+  </table>>];
+
+  dim_usina [label=<
+  <table border="0" cellborder="1" cellspacing="0" cellpadding="4" color="#2f6db5">
+    <tr><td bgcolor="#2f6db5"><font color="white"><b>dim_usina</b> (SCD 1+2)</font></td></tr>
+    <tr><td align="left"><b>sk_usina</b></td></tr>
+    <tr><td align="left">cod_usina, nome</td></tr>
+    <tr><td align="left">cod_fonte, fonte, renovavel, intermitente</td></tr>
+    <tr><td align="left">uf, municipio, latitude, longitude</td></tr>
+    <tr><td align="left">potencia_mw, situacao</td></tr>
+    <tr><td align="left">valido_de, valido_ate, versao, flag_atual</td></tr>
+  </table>>];
+
+  dim_submercado [label=<
+  <table border="0" cellborder="1" cellspacing="0" cellpadding="4" color="#2f6db5">
+    <tr><td bgcolor="#2f6db5"><font color="white"><b>dim_submercado</b></font></td></tr>
+    <tr><td align="left"><b>sk_submercado</b></td></tr>
+    <tr><td align="left">cod_submercado, nome, regioes</td></tr>
+  </table>>];
+
+  dim_regra [label=<
+  <table border="0" cellborder="1" cellspacing="0" cellpadding="4" color="#2f6db5">
+    <tr><td bgcolor="#2f6db5"><font color="white"><b>dim_regra_qualidade</b></font></td></tr>
+    <tr><td align="left"><b>sk_regra</b></td></tr>
+    <tr><td align="left">cod_regra, dimensao, tabela</td></tr>
+    <tr><td align="left">descricao, acao, justificativa</td></tr>
+  </table>>];
+
+  f_ger [label=<
+  <table border="0" cellborder="1" cellspacing="0" cellpadding="4" color="#c2410c">
+    <tr><td bgcolor="#c2410c"><font color="white"><b>fato_geracao_horaria</b></font></td></tr>
+    <tr><td bgcolor="#fff1e6" align="left"><i>grão: 1 usina × 1 hora</i></td></tr>
+    <tr><td align="left">energia_mwh, capacidade_mwh</td></tr>
+    <tr><td align="left">receita_rs, receita_perfil_plano_rs</td></tr>
+    <tr><td align="left">flag_em_parada, status_qualidade</td></tr>
+  </table>>];
+
+  f_pld [label=<
+  <table border="0" cellborder="1" cellspacing="0" cellpadding="4" color="#c2410c">
+    <tr><td bgcolor="#c2410c"><font color="white"><b>fato_pld_horario</b></font></td></tr>
+    <tr><td bgcolor="#fff1e6" align="left"><i>grão: 1 submercado × 1 hora</i></td></tr>
+    <tr><td align="left">pld_rs_mwh, flag_piso, flag_teto</td></tr>
+  </table>>];
+
+  f_cli [label=<
+  <table border="0" cellborder="1" cellspacing="0" cellpadding="4" color="#c2410c">
+    <tr><td bgcolor="#c2410c"><font color="white"><b>fato_clima_horario</b></font></td></tr>
+    <tr><td bgcolor="#fff1e6" align="left"><i>grão: 1 ponto (usina) × 1 hora</i></td></tr>
+    <tr><td align="left">radiacao, vento_100m, temperatura</td></tr>
+    <tr><td align="left">precipitacao, nebulosidade</td></tr>
+  </table>>];
+
+  f_par [label=<
+  <table border="0" cellborder="1" cellspacing="0" cellpadding="4" color="#c2410c">
+    <tr><td bgcolor="#c2410c"><font color="white"><b>fato_parada_horaria</b></font></td></tr>
+    <tr><td bgcolor="#fff1e6" align="left"><i>grão: 1 usina × 1 hora parada</i></td></tr>
+    <tr><td align="left">horas_indisponiveis, tipo_parada</td></tr>
+    <tr><td align="left">energia_esperada_mwh, receita_perdida_rs</td></tr>
+  </table>>];
+
+  f_qual [label=<
+  <table border="0" cellborder="1" cellspacing="0" cellpadding="4" color="#c2410c">
+    <tr><td bgcolor="#c2410c"><font color="white"><b>fato_qualidade_regra</b></font></td></tr>
+    <tr><td bgcolor="#fff1e6" align="left"><i>grão: 1 regra × 1 execução</i></td></tr>
+    <tr><td align="left">avaliados, falhas, percentual_falha</td></tr>
+  </table>>];
+
+  dim_tempo -> f_ger; dim_tempo -> f_pld; dim_tempo -> f_cli; dim_tempo -> f_par;
+  f_ger -> dim_usina; f_cli -> dim_usina; f_par -> dim_usina;
+  f_ger -> dim_submercado; f_pld -> dim_submercado; f_cli -> dim_submercado; f_par -> dim_submercado;
+  f_qual -> dim_regra;
+  { rank=same; f_ger; f_pld; f_cli; f_par; f_qual; }
+  { rank=same; dim_usina; dim_submercado; dim_regra; }
+}
