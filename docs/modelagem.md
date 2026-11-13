@@ -53,11 +53,11 @@ Pelo mesmo motivo existe `receita_perfil_plano_rs` = geração da hora × PLD **
 
 ### dim_tempo (construída pelo grupo)
 
-O grão é 1 hora, de 2025-01-01 00h até o fim do último ano com dado (2026-12-31 23h), mais o membro `-1`. A chave substituta é inteira no formato `AAAAMMDDHH` (ex.: `2025091512`), o que facilita depurar.
+O grão é 1 hora, do início do primeiro ano com dado até o fim do último ano com dado, mais o membro `-1`. Na execução entregue (PLD simulado de 2025), ela cobre 2025 inteiro: 8.760 horas. Quando o PLD de 2026 da CCEE entrar, ela se estende sozinha até 2026-12-31 23h. A chave substituta é inteira no formato `AAAAMMDDHH` (ex.: `2025091512`), o que facilita depurar.
 
 | Atributo | Regra |
 |---|---|
-| `flag_feriado`, `nome_feriado` | `tratado.feriado`: os de 2025 vêm da origem e os de 2026 são **calculados** pelo calendário oficial (regra de qualidade FER-C01) |
+| `flag_feriado`, `nome_feriado` | `tratado.feriado`: os de 2025 vêm da origem. A regra FER-C01 confere se todos os anos dos fatos têm feriados; se faltar algum ano (por exemplo, 2026, quando o PLD real entrar), os feriados nacionais são **calculados** pelo calendário oficial e marcados como CALCULADO |
 | `flag_dia_util` | segunda a sexta e não feriado (ponto facultativo nacional conta como não útil) |
 | `estacao_ano` | hemisfério sul: verão 21/12–20/03, outono 21/03–20/06, inverno 21/06–22/09, primavera 23/09–20/12 |
 | `periodo_hidrologico` | Úmido (dez–abr) / Seco (mai–nov), que afeta hidrelétricas e preço |
